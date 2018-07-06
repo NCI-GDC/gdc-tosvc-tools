@@ -18,14 +18,23 @@ aliquot_id = args['aliquot_id'].strip()
 f1 = open(args['info_file'])
 f2 = open(args['modified_info_file'], "w")
 tmp = f1.readline().strip().split(",")
-f2.write("\t".join(tmp) + "\n")
+tmp1 = []
+for t in tmp:
+    tmp1.append(t.strip("\""))
+f2.write("GDC_Aliquot\t" + "\t".join(tmp1[1:]) + "\n")
 tmp = f1.readline().strip().split(",")
-f2.write("\t".join([aliquot_id] + tmp[1:]) + "\n")
+tmp1 = []
+for t in tmp:
+    tmp1.append(t.strip("\""))
+f2.write("\t".join([aliquot_id] + tmp1[1:]) + "\n")
 f2.close()
 f1.close()
 
-f = open(args['modified_seg_file'], "w")
-for line in open(args['seg_file']):
-    tmp = line.strip().split(",")
-    f.write("\t".join([aliquot_id] + tmp[1:]) + "\n")
-f.close()
+f1 = open(args['seg_file'])
+f2 = open(args['modified_seg_file'], "w")
+f1.readline()
+f2.write("GDC_Aliquot\tChromosome\tStart\tEnd\tNum_Probes\tSegment_Mean\n")
+for line in f1:
+    tmp = line.strip().split("\t")
+    f2.write("\t".join([aliquot_id] + tmp[1 : len(tmp) - 1]) + "\n")
+f2.close()
