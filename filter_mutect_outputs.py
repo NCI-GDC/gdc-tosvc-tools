@@ -16,7 +16,7 @@ f1 = open(input_fn)
 f2 = open(output_fn, "w")
 for line in f1:
     if line[0:6] == "#CHROM":
-        f2.write("##filtering_status_gdc=\"These calls have been run through GDC-filtration pipeline without PureCN NormalDB\">\n")
+        f2.write("##filtering_status_gdc=\"These calls have been run through PureCN-GDCfiltration tumor-only variant calling pipeline without PureCN NormalDB\">\n")
         f2.write(line)
     else:
         f2.write(line)
