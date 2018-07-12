@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
 This script formats a VCF file header to contain various GDC-specific
-metadata attributes:
+metadata attributes for tumor-only variant calling:
 
     * fileDate - the date of the processing
     * center - The NCI Genomic Data Commons (processing center not sequencing)
     * reference - The reference name (GRCh38.d1.vd1.fa)
     * INDIVIDUAL - The patient barcode and case id
-    * SAMPLE - the normal/tumor barcode, aliquot uuid and bam uuid (there will be multiple)
+    * SAMPLE - the sample barcode, aliquot uuid and bam uuid (there will be multiple)
 """
 import pysam
 import argparse
@@ -58,7 +58,7 @@ def build_header( reader, args ):
       '##reference={0}'.format(args.reference_name),
       '##INDIVIDUAL=<NAME={0},ID={1}>'.format(args.patient_barcode, args.case_id),
       '##SAMPLE=<ID=TUMOR,NAME={0},ALIQUOT_ID={1},BAM_ID={2}>'.format(
-          args.tumor_barcode, args.tumor_aliquot_uuid, args.tumor_bam_uuid)
+          args.sample_barcode, args.aliquot_uuid, args.bam_uuid)
     ])
 
     # Initialize new header object
