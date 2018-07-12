@@ -84,9 +84,9 @@ def get_args():
         help='reference name to use in header')
     p.add_argument('--patient_barcode', required=True, help='Patient barcode')
     p.add_argument('--case_id', required=True, help='Case ID')
-    p.add_argument('--tumor_barcode', required=True, help='Tumor barcode')
-    p.add_argument('--tumor_aliquot_uuid', required=True, help='Tumor aliquot uuid')
-    p.add_argument('--tumor_bam_uuid', required=True, help='Tumor BAM uuid')
+    p.add_argument('--sample_barcode', required=True, help='Tumor barcode')
+    p.add_argument('--aliquot_uuid', required=True, help='Tumor aliquot uuid')
+    p.add_argument('--bam_uuid', required=True, help='Tumor BAM uuid')
     return p.parse_args()
 
 if __name__ == '__main__':
