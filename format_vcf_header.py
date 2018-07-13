@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """
-This script formats a VCF file header to contain various GDC-specific
-metadata attributes:
-
+This script formats a VCF file header to contain various GDC-specific metadata attributes:
     * fileDate - the date of the processing
     * center - The NCI Genomic Data Commons (processing center not sequencing)
     * reference - The reference name (GRCh38.d1.vd1.fa)
