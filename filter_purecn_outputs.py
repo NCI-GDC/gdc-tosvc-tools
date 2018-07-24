@@ -41,7 +41,7 @@ for line in f1:
         continue
     val = line.strip().split("\t")
     filter = []
-    if val[6] != ".":
+    if val[6] != "." and val[6] != "PASS":
         filter = val[6].split(";")
     info, sinfo = get_info(val[7:])
     if "PureCN.PS" not in info:
