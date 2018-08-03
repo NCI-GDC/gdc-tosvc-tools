@@ -20,7 +20,7 @@ def get_info(val):
 parser = argparse.ArgumentParser(description='Modify purecn input files.')
 parser.add_argument('-i', '--input_vcf', type=str, required=True, help='purecn input vcf file')
 parser.add_argument('-o', '--output_vcf', type=str, required=True, help='filtered output vcf file')
-parser.add_argument('-p', '--prob_thres', type=float, default=0.2, required=True, help='variants are filtered if their posterior probability less than thredhold)')
+parser.add_argument('-p', '--prob_thres', type=float, default=0.2, required=True, help='variants are filtered if their PureCN somatic posterior probability less than thredhold)')
 args = vars(parser.parse_args())
 input_fn = args['input_vcf']
 output_fn = args['output_vcf']
@@ -32,24 +32,47 @@ header = []
 filter_add = False
 for line in f1:
     if line[0] == "#":
-        if "FILTER" in line and filter_add == False:
+        if filter_add == False:
             f2.write("##FILTER=<ID=PASS,Description=\"Pass all GDC filtering\">\n")
-            f2.write("##FILTER=<ID=purecn_quality,Description=\"PureCN variant quality filter\">\n")
-            f2.write("##FILTER=<ID=gdc_germline,Description=\"PureCN variant calls masked as germline by GDC filtering\">\n")
+            f2.write("##FILTER=<ID=purecn_not_process,Description=\"Variant not processed by PureCN\">\n")
+            f2.write("##FILTER=<ID=gdc_purecn_germline,Description=\"GDC germline filter based on PureCN metrics\">\n")
+            f2.write("##FILTER=<ID=mmq15,Description=\"median mapping quality less than 15\">\n")
+            f2.write("##FILTER=<ID=af0.08,Description=\"alternative allele frequency less than 0.08\">\n")
             filter_add = True
         f2.write(line)
         continue
+
     val = line.strip().split("\t")
-    filter = []
-    if val[6] != "." and val[6] != "PASS":
-        filter = val[6].split(";")
     info, sinfo = get_info(val[7:])
+    filter_set = []
+    if val[6] != "." and val[6] != "PASS":
+        filter_set = val[6].split(";")
+    try:
+        if float(sinfo["MMQ"]) < 15:
+            filter_set.append("mmq15")
+    except:
+        pass
+    try:
+        if float(sinfo["AF"]) < 0.08:
+            filter_set.append("af0.08")
+    except:
+        pass
     if "PureCN.PS" not in info:
-        f2.write("\t".join(val[0:6] + [";".join(filter + ["purecn_quality"])] + val[7:]) + "\n")
+        filter_set.append("purecn_not_process")
+    try:
+        gdc_filter = float(info["PureCN.PS"]) < 0.2 or float(info["PureCN.LR"]) > 2 or float(info["PureCN.LR"]) < -2 \
+                     or float(info["PureCN.GM0"]) > 0.1 or float(info["PureCN.GM1"]) > 0.1 or float(info["PureCN.GM2"]) > 0.1 \
+                     or float(info["PureCN.GM3"]) > 0.1 or float(info["PureCN.GM4"]) > 0.1 or float(info["PureCN.GM5"]) > 0.1 \
+                     or float(info["PureCN.GM6"]) > 0.1 or float(info["PureCN.GM7"]) > 0.1
+        if gdc_filter:
+            filter_set.append("gdc_purecn_germline")
+    except:
+        pass
+
+    if len(filter_set) == 0:
+        f2.write("\t".join(val[0:6] + ["PASS"] + val[7:]) + "\n")
     else:
-        if float(info["PureCN.PS"]) < prob_thres:
-            f2.write("\t".join(val[0:6] + [";".join(filter + ["gdc_germline"])] + val[7:]) + "\n")
-        else:
-            f2.write("\t".join(val[0:6] + ["PASS"] + val[7:]) + "\n")
-f2.close()
+        f2.write("\t".join(val[0:6] + [";".join(filter_set)] + val[7:]) + "\n")
+
 f1.close()
+f2.close()
