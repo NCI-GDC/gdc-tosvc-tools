@@ -33,7 +33,7 @@ for line in f1:
             f2.write("##FILTER=<ID=PASS,Description=\"Pass all GDC filtering\">\n")
             f2.write("##FILTER=<ID=mmq15,Description=\"median mapping quality less than 15\">\n")
             f2.write("##FILTER=<ID=af0.08,Description=\"alternative allele frequency less than 0.08\">\n")
-            f2.write("##gdc_filtering_status=\"These calls have not been filtered by PureCN because PureCN NormalDB is not available for this capture kit\">\n")
+            f2.write("##gdc_filtering_status=These calls have not been filtered by PureCN because PureCN NormalDB is not available for this capture kit.\n")
             filter_add = True
         f2.write(line)
         continue
