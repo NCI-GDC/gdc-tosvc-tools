@@ -31,6 +31,9 @@ with open(log_fn) as f:
     for line in f:
         if "Cannot find valid purity/ploidy solution" in line:
             error_capture = True
+            break
+if not error_capture:
+    sys.exit(1)
 
 f1 = open(input_fn)
 f2 = open(output_fn, "w")
