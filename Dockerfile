@@ -10,12 +10,13 @@ COPY filter_purecn_outputs.py .
 COPY modify_purecn_outputs.py .
 COPY format_vcf_header.py .
 COPY extract_wig_size.py .
-
+COPY annot_fail_purecn_vcf.py .
 RUN chmod 755 filter_mutect_outputs.py \
     	      filter_purecn_outputs.py \
-	      modify_purecn_outputs.py \
-	      format_vcf_header.py \
-	      extract_wig_size.py
+	          modify_purecn_outputs.py \
+	          format_vcf_header.py \
+	          extract_wig_size.py \
+              annot_fail_purecn_vcf.py
 
 RUN pip install pysam
 
