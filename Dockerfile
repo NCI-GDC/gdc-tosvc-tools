@@ -22,4 +22,3 @@ RUN chmod 755 filter_mutect_outputs.py \
 	      filter_vardict_paired_outputs.py
 
 RUN pip install pysam
-
