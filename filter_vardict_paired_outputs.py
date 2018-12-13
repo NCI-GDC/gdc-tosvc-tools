@@ -41,24 +41,22 @@ for line in f1:
 
     val = line.strip().split("\t")
     info, sinfo = get_info(val[7:])
-    if info["STATUS"] != "StrongSomatic" and info["STATUS"] != "LikelySomatic":
-        continue
     filter_set = []
     if val[6] != "." and val[6] != "PASS":
         filter_set = val[6].split(";")
     try:
         if float(sinfo["AF"]) < 0.08:
-            filter_set.append("af0.08")
+            filter_set.append("f0.08")
     except:
         pass
     try:
         if float(info["SSF"]) > 0.005:
-            filter_set.append("ssf0.005")
+            filter_set.append("P0.005")
     except:
         pass
     try:
         if float(info["SSF"]) > 0.0001 and float(info["MSI"]) == 1 and float(info["MSILEN"]) >= 5:
-            filter_set.append("ssf0.0001msi")
+            filter_set.append("P0.0001MSI")
     except:
         pass
     if len(filter_set) == 0:
