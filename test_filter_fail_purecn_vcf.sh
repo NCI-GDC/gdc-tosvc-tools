@@ -1,0 +1,2 @@
+#python annot_fail_purecn_vcf.py -l /mnt/data/DLBCL/PureCN_cwl/cwl_test_dlbcl2/7ba32188-5608-445c-8d04-f7c389acea27.log -i /mnt/data/DLBCL/tumors/07182018-test-DLBCL-Nam.mutect2.tumor_only.contFiltered.oxogFiltered.vcf -o test_annot_fail_purecn.vcf
+python annot_fail_purecn_vcf.py -l /mnt/data/DLBCL/PureCN_cwl/cwl_test_dlbcl2/b19c4b87-990c-4d91-a8ab-28d4b4ffcf81.log -i /mnt/data/DLBCL/tumors/07182018-test-DLBCL-Nam.mutect2.tumor_only.contFiltered.oxogFiltered.vcf -o test_annot_fail_purecn.vcf
