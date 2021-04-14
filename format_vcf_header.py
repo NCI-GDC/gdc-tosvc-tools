@@ -36,7 +36,7 @@ def process_vcf(args):
 
     # If the output file is bgzipped, we should index it
     if mode == 'wz':
-        tbx = pysam.tabix_index( args.output_vcf, preset='vcf', force=True ) 
+        tbx = pysam.tabix_index( args.output_vcf, preset='vcf', force=True )
 
 def build_header( reader, args ):
     """
