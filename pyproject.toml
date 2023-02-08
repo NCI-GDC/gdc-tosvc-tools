@@ -43,7 +43,7 @@ test = [
 homepage = "https://github.com/NCI-GDC/gdc-tosvc-tools"
 
 [project.scripts]
-"gdc_tosvc_tools" = "gdc_tosvc_tools.__main__:main"
+"gdc_tosvc_tools" = "gdc_tosvc_tools.__main__:cli"
 
 [tool.setuptools_scm]
 write_to = "gdc_tosvc_tools/_version.py"
