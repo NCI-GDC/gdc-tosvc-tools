@@ -8,10 +8,11 @@ import os
 
 import click
 
+from gdc_tosvc_tools.__main__ import CLI
 from gdc_tosvc_tools.utils import get_info
 
 
-@click.command()
+@click.command(cls=CLI)
 @click.option(
     "-i", "--input_vcf", type=str, required=True, help="VarDict input vcf file"
 )

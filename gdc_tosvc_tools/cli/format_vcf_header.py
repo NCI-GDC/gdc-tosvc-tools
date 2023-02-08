@@ -12,8 +12,10 @@ import datetime
 import click
 import pysam
 
+from gdc_tosvc_tools.__main__ import CLI
 
-@click.command()
+
+@click.command(cls=CLI)
 @click.option("--input_vcf", type=str, required=True, help="The input VCF file")
 @click.option(
     "--output_vcf", type=str, required=True, help="The output reheader VCF file"
@@ -29,7 +31,7 @@ import pysam
 @click.option("--sample_barcode", required=True, help="Tumor barcode")
 @click.option("--aliquot_uuid", required=True, help="Tumor aliquot uuid")
 @click.option("--bam_uuid", required=True, help="Tumor BAM uuid")
-def process_vcf(
+def main(
     input_vcf: str,
     output_vcf: str,
     reference_name: str,
@@ -39,11 +41,6 @@ def process_vcf(
     aliquot_uuid: str,
     bam_uuid: str,
 ) -> None:
-    """
-    Takes the command-line arguments and acts as the main wrapper function
-    for annotating the GDC VCF headers.
-    """
-    # Reader
     reader = pysam.VariantFile(input_vcf)
 
     # Load new header
@@ -125,6 +122,6 @@ def build_header(
 
 
 if __name__ == "__main__":
-    process_vcf()
+    main()
 
 # __END__

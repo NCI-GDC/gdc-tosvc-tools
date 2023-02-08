@@ -9,21 +9,11 @@ import sys
 
 import click
 
-
-def get_info(val):
-    info, sinfo = {}, {}
-    for v in val[0].split(";"):
-        tmp1 = v.split("=")
-        if len(tmp1) == 2:
-            info[tmp1[0]] = tmp1[1]
-    tmp2 = val[1].split(":")
-    tmp3 = val[2].split(":")
-    for i in range(len(tmp2)):
-        sinfo[tmp2[i]] = tmp3[i]
-    return info, sinfo
+from gdc_tosvc_tools.__main__ import CLI
+from gdc_tosvc_tools.utils import get_info
 
 
-@click.command()
+@click.command(cls=CLI)
 @click.option("--purecn-log", "-l", required=True, help="PureCN Log File")
 @click.option("--input-vcf", "-i", required=True, help="Input VCF File")
 @click.option("--output-vcf", "-o", required=True, help="Annotated Output VCF File")

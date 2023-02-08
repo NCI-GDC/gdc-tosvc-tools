@@ -5,8 +5,10 @@ following GDC-specs for metadata and content
 
 import click
 
+from gdc_tosvc_tools.__main__ import CLI
 
-@click.command()
+
+@click.command(cls=CLI)
 @click.option("--sample_id", required=True, help="sample_id")
 @click.option("--info_file", required=True, help="purecn info file")
 @click.option("--seg_file", required=True, help="purecn dnacopy seg file")
