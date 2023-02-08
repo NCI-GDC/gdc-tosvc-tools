@@ -3,9 +3,9 @@
 Python Project Template Entrypoint Script
 """
 
-import datetime
 import logging
-import sys
+import os
+from typing import Any, List
 
 import click
 
@@ -21,61 +21,33 @@ logging.basicConfig(
     format="%(asctime)s %(name)s:%(lineno)s %(levelname)s | %(message)s",
 )
 
-
-def run() -> int:
-    """Method for running script logic.
-
-    Accepts:
-        run_args (namespace): Collection of parsed arguments
-    Returns:
-        ret_code (int): Return code for sys.exit()
-    """
-
-    ret_val = 0
-
-    start_time = datetime.datetime.now()
-
-    log.info("Running process...")
-
-    # Log runtime info
-    end_time = datetime.datetime.now()
-    run_time = end_time - start_time
-    log.info("Run time: %d seconds", run_time.seconds)
-    return ret_val
+cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "cli"))
 
 
-@click.command()
-@click.version_option(version=__version__)
-# Add new cli args, e.g.:
-# @click.option("--foo")
-# @click.option("--bar")
-# def main(foo: str, bar: int):
-def main() -> int:
-    """Main Entrypoint."""
-    exit_code = 0
-    args = sys.argv
+class CLI(click.MultiCommand):
+    def list_commands(self, _: click.Context) -> List[str]:
+        rv = []
+        for filename in os.listdir(cmd_folder):
+            if filename.endswith(".py") and not filename == "__init__.py":
+                rv.append(filename.strip(".py"))
+        rv.sort()
+        return rv
 
-    log.info("Version: %s", __version__)
-    log.info("Process called with %s", args)
+    def get_command(self, _: click.Context, name: str) -> Any:
+        try:
+            mod = __import__(f"gdc_tosvc_tools.cli.{name}", None, None, ["main"])
+        except ImportError:
+            return
+        return mod.main
 
-    try:
-        exit_code = run()
-    except Exception as e:
-        log.exception(e)
-        exit_code = 1
-    return exit_code
+
+@click.command(cls=CLI)
+def cli() -> None:
+    click.echo()
 
 
 if __name__ == "__main__":
-    """CLI Entrypoint"""
-
-    status_code = 0
-    try:
-        status_code = main()
-    except Exception as e:
-        log.exception(e)
-        sys.exit(1)
-    sys.exit(status_code)
+    cli()
 
 
 # __END__
