@@ -29,7 +29,8 @@ def main(
         tmp1 = []
         for t in tmp:
             tmp1.append(t.strip('"'))
-        modified_info_fh.write("GDC_Aliquot\t" + "\t".join(tmp1[1:]) + "\n")
+        modified_info_fh.write("GDC_Aliquot\t" + "\t".join(tmp1[1:]))
+        modified_info_fh.write("\n")
         tmp = info_fh.readline().strip().split(",")
         tmp1 = []
         for t in tmp:
@@ -39,8 +40,18 @@ def main(
     with open(seg_file) as seg_fh, open(modified_seg_file, "w") as modified_seg_fh:
         seg_fh.readline()
         modified_seg_fh.write(
-            "GDC_Aliquot\tChromosome\tStart\tEnd\tNum_Probes\tSegment_Mean\n"
+            "\t".join(
+                [
+                    "GDC_Aliquot",
+                    "Chromosome",
+                    "Start",
+                    "End",
+                    "Num_Probes",
+                    "Segment_Mean",
+                ]
+            )
         )
+        modified_seg_fh.write("\n")
         for line in seg_fh:
             tmp = line.strip().split("\t")
             idx = len(tmp) - 1

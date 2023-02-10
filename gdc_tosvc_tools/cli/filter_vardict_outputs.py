@@ -36,10 +36,10 @@ def main(
                 if not filter_add:
                     output_fh.writelines(
                         [
-                            '##FILTER=<ID=PASS,Description="Pass all GDC filtering">',
-                            '##FILTER=<ID=af0.08,Description="alternative allele frequency (AF) less than 0.08">',
-                            '##FILTER=<ID=ssf0.005,Description="p-value of variant (SSF) greater than 0.005">',
-                            '##FILTER=<ID=ssf0.0001msi,Description="p-value of variant (SSF) greater than 0.0001 and MSILEN equal to 1 and MSI greater than 4">',
+                            '##FILTER=<ID=PASS,Description="Pass all GDC filtering">\n',
+                            '##FILTER=<ID=af0.08,Description="alternative allele frequency (AF) less than 0.08">\n',
+                            '##FILTER=<ID=ssf0.005,Description="p-value of variant (SSF) greater than 0.005">\n',
+                            '##FILTER=<ID=ssf0.0001msi,Description="p-value of variant (SSF) greater than 0.0001 and MSILEN equal to 1 and MSI greater than 4">\n',
                         ]
                     )
                     filter_add = True

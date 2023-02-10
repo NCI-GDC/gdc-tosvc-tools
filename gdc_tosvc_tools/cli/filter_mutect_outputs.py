@@ -36,10 +36,10 @@ def main(
                 if filter_add is False:
                     output_fh.writelines(
                         [
-                            '##FILTER=<ID=PASS,Description="Pass all GDC filtering">',
-                            '##FILTER=<ID=mmq15,Description="median mapping quality less than 15">',
-                            '##FILTER=<ID=af0.08,Description="alternative allele frequency less than 0.08">',
-                            "##gdc_filtering_status=These calls have not been filtered by PureCN because PureCN NormalDB is not available for this capture kit.",
+                            '##FILTER=<ID=PASS,Description="Pass all GDC filtering">\n',
+                            '##FILTER=<ID=mmq15,Description="median mapping quality less than 15">\n',
+                            '##FILTER=<ID=af0.08,Description="alternative allele frequency less than 0.08">\n',
+                            "##gdc_filtering_status=These calls have not been filtered by PureCN because PureCN NormalDB is not available for this capture kit.\n",
                         ]
                     )
                     filter_add = True

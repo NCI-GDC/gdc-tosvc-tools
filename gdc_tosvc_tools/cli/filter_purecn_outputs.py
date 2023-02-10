@@ -47,11 +47,11 @@ def main(
                 if filter_add is False:
                     output_fh.writelines(
                         [
-                            '##FILTER=<ID=PASS,Description="Pass all GDC filtering">',
-                            '##FILTER=<ID=purecn_not_process,Description="Variant not processed by PureCN">',
-                            '##FILTER=<ID=gdc_purecn_germline,Description="GDC germline filter based on PureCN metrics">',
-                            '##FILTER=<ID=mmq15,Description="median mapping quality less than 15">',
-                            '##FILTER=<ID=af0.08,Description="alternative allele frequency less than 0.08">',
+                            '##FILTER=<ID=PASS,Description="Pass all GDC filtering">\n',
+                            '##FILTER=<ID=purecn_not_process,Description="Variant not processed by PureCN">\n',
+                            '##FILTER=<ID=gdc_purecn_germline,Description="GDC germline filter based on PureCN metrics">\n',
+                            '##FILTER=<ID=mmq15,Description="median mapping quality less than 15">\n',
+                            '##FILTER=<ID=af0.08,Description="alternative allele frequency less than 0.08">\n',
                         ]
                     )
                     filter_add = True

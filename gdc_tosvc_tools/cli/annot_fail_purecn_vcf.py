@@ -25,47 +25,40 @@ def main(
 
     error_capture = False
     with open(purecn_log) as f:
-        for line in f:
-            if "Cannot find valid purity/ploidy solution" in line:
-                error_capture = True
-                break
-    if not error_capture:
-        sys.exit(1)
+        if "Cannot find valid purity/ploidy solution" in f.read():
+            sys.exit(1)
 
     if os.path.basename(input_vcf).endswith(".gz"):
         open_fn = gzip
     else:
         open_fn = open  # type: ignore
 
-    f2 = open(output_vcf, "w")
     filter_add = False
-    with open_fn(input_vcf, "r") as f1, open(output_vcf, "w") as f2:  # type: ignore
-        for line in f1:
+    with open_fn(input_vcf, "r") as input_fh, open(output_vcf, "w") as output_fh:  # type: ignore
+        for line in input_fh:
             if line.startswith("#"):
                 if filter_add is False:
-                    f2.write(
-                        '##FILTER=<ID=PASS,Description="Pass all GDC filtering">\n'
-                    )
-                    f2.write(
-                        '##FILTER=<ID=mmq15,Description="median mapping quality less than 15">\n'
-                    )
-                    f2.write(
-                        '##FILTER=<ID=af0.08,Description="alternative allele frequency less than 0.08">\n'
+                    output_fh.writelines(
+                        [
+                            '##FILTER=<ID=PASS,Description="Pass all GDC filtering">\n',
+                            '##FILTER=<ID=mmq15,Description="median mapping quality less than 15">\n',
+                            '##FILTER=<ID=af0.08,Description="alternative allele frequency less than 0.08">\n',
+                        ]
                     )
                     if error_capture:
-                        f2.write(
+                        output_fh.write(
                             "##gdc_filtering_status=PureCN 1.11.11 cannot find valid purity/ploidy solution. These calls have been run through PureCN-GDCfiltration tumor-only variant calling pipeline without PureCN filtering.\n"
                         )
                     else:
-                        f2.write(
+                        output_fh.write(
                             "##gdc_filtering_status=PureCN 1.11.11 fails to run on this sample. These calls have been run through PureCN-GDCfiltration tumor-only variant calling pipeline without PureCN filtering.\n"
                         )
                     filter_add = True
-                f2.write(line)
+                output_fh.write(line)
                 continue
 
             val = line.strip().split("\t")
-            info, sinfo = get_info(val[7:])
+            _, sinfo = get_info(val[7:])
             filter_set = []
             if val[6] != "." and val[6] != "PASS":
                 filter_set = val[6].split(";")
@@ -80,9 +73,11 @@ def main(
             except Exception:
                 pass
             if len(filter_set) == 0:
-                f2.write("\t".join(val[0:6] + ["PASS"] + val[7:]) + "\n")
+                output_fh.write("\t".join(val[0:6] + ["PASS"] + val[7:]))
+                output_fh.write("\n")
             else:
-                f2.write("\t".join(val[0:6] + [";".join(filter_set)] + val[7:]) + "\n")
+                output_fh.write("\t".join(val[0:6] + [";".join(filter_set)] + val[7:]))
+                output_fh.write("\n")
 
 
 if __name__ == "__main__":
