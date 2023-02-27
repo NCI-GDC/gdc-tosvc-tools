@@ -1,25 +1,25 @@
-FROM python:2
+ARG REGISTRY=docker.osdc.io
+ARG BASE_CONTAINER_VERSION=2.0.1
 
-MAINTAINER Nam Sy Vo <vosynam@gmail.com>
+FROM ${REGISTRY}/ncigdc/python3.8-builder:${BASE_CONTAINER_VERSION} as builder
 
-RUN mkdir /gdc_tosvc_tools
-WORKDIR /gdc_tosvc_tools
+COPY ./ /opt
 
-COPY filter_mutect_outputs.py .
-COPY filter_purecn_outputs.py .
-COPY modify_purecn_outputs.py .
-COPY format_vcf_header.py .
-COPY extract_wig_size.py .
-COPY annot_fail_purecn_vcf.py .
-COPY filter_vardict_outputs.py .
-COPY filter_vardict_purecn_outputs.py .
+WORKDIR /opt
 
-RUN chmod 755 filter_mutect_outputs.py \
-    	      filter_purecn_outputs.py \
-	      modify_purecn_outputs.py \
-	      format_vcf_header.py \
-	      extract_wig_size.py \
-              annot_fail_purecn_vcf.py \
-	      filter_vardict_outputs.py \
-	      filter_vardict_purecn_outputs.py
-RUN pip install pysam
+RUN pip install tox && tox -e build
+
+FROM ${REGISTRY}/ncigdc/python3.8:${BASE_CONTAINER_VERSION}
+
+COPY --from=builder /opt/dist/*.whl /opt/
+COPY requirements.txt /opt/
+
+WORKDIR /opt
+
+RUN pip install --no-deps -r requirements.txt \
+	&& pip install --no-deps *.whl \
+	&& rm -f *.whl requirements.txt
+
+ENTRYPOINT ["gdc_tosvc_tools"]
+
+CMD ["--help"]
