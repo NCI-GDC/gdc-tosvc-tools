@@ -5,7 +5,7 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Python.gitlab-ci.yml
 include:
   - project: nci-gdc/gitlab-templates
-    ref: master
+    ref: 0.1.0
     file:
       - templates/global/full.yaml
       - templates/python/full.yaml
@@ -42,7 +42,7 @@ docker_build:
         DOCKER_RELEASE_REGISTRY: "quay.io"
     - when: always
   script:
-    - docker build . 
+    - docker build .
       --file ./Dockerfile
       ${DOCKER_BUILD_OPTS}
       --build-arg http_proxy
