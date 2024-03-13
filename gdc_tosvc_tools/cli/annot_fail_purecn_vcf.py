@@ -28,7 +28,7 @@ def main(
     target_pattern = re.compile(
         r"variants annotated as likely germline \(DB INFO flag\)\."
     )
-    germline_precentage = None
+    germline_percentage = None
     germline_error = False
     seen_error = False
     with open(purecn_log) as f:
@@ -40,7 +40,7 @@ def main(
             if match:
                 percentage = re.search(r"\(([\d.]+)%\)", line)
                 if percentage:
-                    germline_precentage = float(percentage.group(1))
+                    germline_percentage = float(percentage.group(1))
             if (
                 "error in evaluating the argument 'x' in selecting a method for function 'median': non-numeric argument to mathematical function"
                 in line
@@ -54,10 +54,14 @@ def main(
             if any(error_msg in line for error_msg in error_patterns):
                 seen_error = True
 
-    if germline_error and germline_precentage <= 2.0:
+    if (
+        germline_error
+        and germline_percentage is not None
+        and germline_percentage <= 2.0
+    ):
         known_error = True
 
-    if seen_error and germline_precentage <= 8.0:
+    if seen_error and germline_percentage is not None and germline_percentage <= 8.0:
         known_error = True
 
     if known_error:
